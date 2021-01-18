@@ -1,5 +1,7 @@
 package com.example.seoulpubliclibrary
 
+import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -32,7 +34,17 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-
+        mMap.setOnMarkerClickListener {
+            if(it.tag != null) {
+                var url = it.tag as String
+                if (!url.startsWith("http")) {
+                    url = "https://${url}"
+                }
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                startActivity(intent)
+            }
+            true
+        }
         loadLibraries()
     }
 
@@ -64,7 +76,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         for(lib in libraries.SeoulPublicLibraryInfo.row){
             val position = LatLng(lib.XCNTS.toDouble(), lib.YDNTS.toDouble())
             val marker = MarkerOptions().position(position).title(lib.LBRRY_NAME)
-            mMap.addMarker(marker)
+            mMap.addMarker(marker).tag = lib.HMPG_URL
             latLngBounds.include(marker.position)
         }
 
@@ -74,4 +86,5 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val updated = CameraUpdateFactory.newLatLngBounds(bounds, padding)
         mMap.moveCamera(updated)
     }
+
 }
