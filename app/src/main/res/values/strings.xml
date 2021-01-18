@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name">SeoulPublicLibrary</string>
-    <string name="title_activity_maps">Map</string>
+    <string name="app_name">서울 공공도서관 현황</string>
+    <string name="title_activity_maps">서울 공공도서관 현황</string>
 </resources>
